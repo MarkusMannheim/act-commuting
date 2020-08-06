@@ -1,0 +1,95 @@
+@font-face {
+  font-family: "ABCSans Black";
+  font-style: normal;
+  font-weight: normal;
+  src: local("ABCSans Black"), url("./abcsans-black.woff") format("woff");
+}
+@font-face {
+  font-family: "ABCSans Regular";
+  font-style: normal;
+  font-weight: normal;
+  src: local("ABCSans Regular"), url("./abcsans-regular.woff") format("woff");
+}
+@font-face {
+  font-family: "ABCSans Light";
+  font-style: normal;
+  font-weight: normal;
+  src: local("ABCSans Light"), url("./abcsans-light.woff") format("woff");
+}
+:root {
+  font-family: "ABCSans Black", "Arial Black", sans-serif;
+  font-size: 1em;
+}
+body {
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+#chart {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height:100%;
+}
+.bar {
+  fill: #009CBF;
+}
+.bar text {
+  fill: white;
+  font-size: 1.25rem;
+  opacity: 0;
+}
+.bar .value {
+  font-family: "ABCSans Regular", "Arial", sans-serif;
+  text-anchor: end;
+  font-size: 1rem;
+}
+.all {
+  fill: #00A388;
+}
+.ACT {
+  fill: #F75F00;
+}
+.tick text {
+  font-size: .7rem;
+  fill: #1C1C1C;
+}
+.tick line {
+  stroke: #1C1C1C;
+  stroke-dasharray: 2 2;
+  opacity: .5;
+}
+path.domain {
+  stroke: none;
+}
+#label {
+  position: absolute;
+  text-align: right;
+  right: 0;
+  color: rgba(28, 28, 28, .5);
+  font-size: 2rem;
+}
+#footer {
+  position: absolute;
+  bottom: 0;
+  color: rgba(28, 28, 28, .75);
+  font-family: "ABCSans Regular", "Arial", sans-serif;
+  font-size: .95rem;
+}
+#footer span {
+  font-family: "ABCSans Light", "Arial Narrow", sans-serif;
+  font-size: .85rem;
+}
+@media (max-width: 500px) {
+  #label {
+    font-size: 1.5rem;
+  }
+}

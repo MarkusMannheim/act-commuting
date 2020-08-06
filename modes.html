@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155991615-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-155991615-1');
+    </script>
+    <!-- my stuff -->
+    <meta charset="utf-8">
+    <title>ACT commuting modes</title>
+    <meta name="author" content="Markus Mannheim">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Initial scripts -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link href="./resources/modes.css" rel="stylesheet">
+    <link href="./resources/abcLogo64.png" rel="icon">
+  </head>
+  <body>
+    <!-- Initial page layout -->
+    <div id="container">
+      <svg id="chart">
+        <g id="axisGroup"></g>
+        <g id="chartGroup"></g>
+      </svg>
+      <div id="header">
+        How Canberrans get to work
+      </div>
+      <div id="footer">
+        Source: <a href="https://www.abs.gov.au/census" target="_blank">ABS census 2016
+      </div>
+    </div>
+    <script>
+      // load chart data
+      d3.csv("./resources/modes.csv", function(error, data) {
+        if (error) throw error;
+        // format data
+        chartData = data
+          .map(function(d) {
+            d.people = +(d.people.replace(",", ""));
+            return d;
+          })
+          .sort(function(a, b) { return d3.descending(a.people, b.people); });
+        // page elements
+        chart = d3.select("#chart");
+        chartGroup = d3.select("#chartGroup");
+        axisGroup = d3.select("#axisGroup");
+        header = d3.select("#header");
+        footer = d3.select("#footer");
+        // set up
+        margin = { right: 16, left: 10 };
+        sum = d3.sum(chartData, function(d) { return d.people; });
+        max = d3.max(chartData, function(d) { return d.people / sum; });
+        x = d3.scaleLinear()
+          .domain([0, max]);
+        y = d3.scaleBand()
+          .domain(chartData.map(function(d) { return d.mode; }))
+          .padding(.1)
+          .paddingOuter(0);
+        axis = d3.axisBottom(x)
+          .tickSizeOuter(0)
+          .tickPadding(8);
+        bars = chartGroup
+          .selectAll(".bar")
+            .data(chartData, function(d) { return d.mode; })
+          .enter().append("g")
+            .classed("bar", true);
+        bars.append("rect")
+          .classed("background", true);
+        bars.append("rect")
+          .classed("result", true);
+        bars.append("text")
+          .classed("label", true)
+          .text(function(d) { return d.mode; });
+        bars.append("text")
+          .classed("value", true)
+          .text(function(d) { return d3.format(",.0%")(d.people / sum); });
+        // listen for resize
+        window.addEventListener("resize", resize);
+        resize();
+        d3.timeout(resize, 1000);
+      });
+      // set page dimensions
+      function resize() {
+        dimensions = document.body.getBoundingClientRect();
+        width = dimensions.width;
+        height = dimensions.height;
+        let headerHeight = parseFloat(header.style("height"));
+        let footerHeight = parseFloat(footer.style("height"));
+        margin.top = headerHeight + 8;
+        margin.bottom = footerHeight + 24;
+        x.range([margin.left, width - margin.right]);
+        y.range([margin.top, height - margin.bottom]);
+        axis.ticks(width < 500 ? 3 : 5, ".0%")
+          .tickSizeInner(margin.top + margin.bottom - height);
+        axisGroup.attr("transform", "translate(0, " + (height - margin.bottom) + ")");
+        draw();
+      }
+      function draw() {
+        bars.select(".background")
+          .attr("height", y.bandwidth())
+          .attr("x", x(0))
+          .attr("y", function(d) { return y(d.mode); })
+          .attr("width", x(max) - x(0));
+        bars.select(".result")
+          .attr("height", y.bandwidth())
+          .attr("x", x(0))
+          .attr("y", function(d) { return y(d.mode); })
+          .attr("width", function(d) { return x(d.people / sum) - x(0); });
+        bars.select(".label")
+          .attr("y", function(d) { return y(d.mode) + y.bandwidth() / 2 + 6; })
+          .attr("x", function(d) {
+            if (this.parentNode.querySelector(".result").getBBox().width + margin.left > this.getBBox().width + 56) {
+              return 64;
+            } else {
+              this.setAttribute("style", "fill: #1C1C1C;");
+              return this.parentNode.querySelector(".result").getBBox().width + margin.left + 40;
+            }
+          });
+        bars.select(".value")
+          .attr("y", function(d) { return y(d.mode) + y.bandwidth() / 2 + 6; })
+          .attr("x", function(d) {
+            if (this.parentNode.querySelector(".result").getBBox().width + margin.left > this.parentNode.querySelector(".label").getBBox().width + 40) {
+              return 56;
+            } else {
+              this.setAttribute("style", "fill: #966900;");
+              return this.parentNode.querySelector(".result").getBBox().width + margin.left + 32;
+            }
+          });;
+        axisGroup.call(axis);
+      }
+    </script>
+  </body>
+</html>
