@@ -38,7 +38,7 @@
     </div>
     <script>
       // load chart data
-      d3.json("https://www.data.act.gov.au/resource/jia3-rxue.json?$query=SELECT%20fiscal_week,total%20ORDER%20BY%20fiscal_week", function(error, data) {
+      d3.json("https://www.data.act.gov.au/resource/jia3-rxue.json?$query=SELECT%20fiscal_week,total%20WHERE%20fiscal_week%20%3E%20%272018-12-31%27%20ORDER%20BY%20fiscal_week", function(error, data) {
         if (error) throw error
         // format data
         chartData = data
@@ -48,9 +48,13 @@
               journeys: +d.total
             };
           });
-        chartData = chartData
+        dataLastYear = chartData
           .filter(function(d) {
-            return d.week > new Date("2019-01-01");
+            return d.week.getYear() == 119;
+          });
+        dataThisYear = chartData
+          .filter(function(d) {
+            return d.week.getYear() == 120;
           });
         // page elements
         margin = { right: 5, left: 30 };
@@ -62,25 +66,29 @@
         header = d3.select("#header");
         footer = d3.select("#footer");
         // set up
-        x = d3.scaleTime()
-          .domain(d3.extent(chartData, function(d) { return d.week; }));
+        xThisYear = d3.scaleTime()
+          .domain([new Date("2020-01-01"), new Date("2020-12-31")]);
+        xLastYear = d3.scaleTime()
+          .domain([new Date("2019-01-01"), new Date("2019-12-31")]);
         y = d3.scaleLinear()
           .domain([0, d3.max(chartData, function(d) { return d.journeys; })]);
-        xAxis = d3.axisBottom(x)
+        xAxis = d3.axisBottom(xThisYear)
           .tickSizeOuter(0)
           .tickPadding(8);
         yAxis = d3.axisLeft(y)
           .tickSizeOuter(0)
           .tickPadding(5)
           .ticks(5, "3s");
-        area = d3.area()
-          .x(function(d) { return x(d.week); })
-          .y1(function(d) { return y(d.journeys); })
-          .y0(function() { return y(0); })
+        line = d3.line()
           .curve(d3.curveCardinal);
-        plot = chartGroup
+        plotThisYear = chartGroup
           .append("path")
-            .attr("id", "plot");
+            .attr("id", "plotThisYear")
+            .classed("plot", true);
+        plotLastYear = chartGroup
+          .append("path")
+            .attr("id", "plotLastYear")
+            .classed("plot", true);
         // listen for resize
         window.addEventListener("resize", resize);
         resize();
@@ -95,10 +103,11 @@
         let footerHeight = parseFloat(footer.style("height"));
         margin.top = headerHeight + 8;
         margin.bottom = footerHeight + 24;
-        x.range([margin.left, width - margin.right]);
+        xThisYear.range([margin.left, width - margin.right]);
+        xLastYear.range([margin.left, width - margin.right]);
         y.range([height - margin.bottom, margin.top]);
         xAxis.tickSizeInner(margin.top + margin.bottom - height)
-          .ticks(width < 500 ? 3 : 5, "%b %Y");
+          .ticks(width < 500 ? 3 : 5, "%b");
         yAxis.tickSizeInner(margin.left + margin.right - width);
         xAxisGroup.attr("transform", "translate(0, " + (height - margin.bottom) + ")");
         draw();
@@ -106,7 +115,8 @@
       function draw() {
         xAxisGroup.call(xAxis);
         yAxisGroup.call(yAxis);
-        plot.attr("d", function(d) { return area(chartData); });
+        plotLastYear.attr("d", line(dataLastYear.map(function(d) { return [xLastYear(d.week), y(d.journeys)]; })));
+        plotThisYear.attr("d", line(dataThisYear.map(function(d) { return [xThisYear(d.week), y(d.journeys)]; })));
       }
     </script>
   </body>
