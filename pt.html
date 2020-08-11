@@ -81,14 +81,24 @@
           .ticks(5, "3s");
         line = d3.line()
           .curve(d3.curveCardinal);
-        plotThisYear = chartGroup
-          .append("path")
-            .attr("id", "plotThisYear")
-            .classed("plot", true);
         plotLastYear = chartGroup
           .append("path")
             .attr("id", "plotLastYear")
             .classed("plot", true);
+        plotThisYear = chartGroup
+          .append("path")
+            .attr("id", "plotThisYear")
+            .classed("plot", true);
+        labelLastYear = chartGroup
+          .append("text")
+            .attr("id", "labelLastYear")
+            .classed("label", true)
+            .text("last year");
+        labelThisYear = chartGroup
+          .append("text")
+            .attr("id", "labelThisYear")
+            .classed("label", true)
+            .text("this year");
         // listen for resize
         window.addEventListener("resize", resize);
         resize();
@@ -101,22 +111,26 @@
         height = dimensions.height;
         let headerHeight = parseFloat(header.style("height"));
         let footerHeight = parseFloat(footer.style("height"));
-        margin.top = headerHeight + 8;
+        margin.top = headerHeight + 16;
         margin.bottom = footerHeight + 24;
         xThisYear.range([margin.left, width - margin.right]);
         xLastYear.range([margin.left, width - margin.right]);
         y.range([height - margin.bottom, margin.top]);
-        xAxis.tickSizeInner(margin.top + margin.bottom - height)
-          .ticks(width < 500 ? 3 : 5, "%b");
-        yAxis.tickSizeInner(margin.left + margin.right - width);
-        xAxisGroup.attr("transform", "translate(0, " + (height - margin.bottom) + ")");
         draw();
       }
       function draw() {
-        xAxisGroup.call(xAxis);
+        xAxisGroup.attr("transform", "translate(0, " + (height - margin.bottom) + ")")
+          .call(xAxis);
         yAxisGroup.call(yAxis);
+        xAxis.tickSizeInner(margin.top + margin.bottom - height)
+          .ticks(width < 500 ? 5 : 10, "%b");
+        yAxis.tickSizeInner(margin.left + margin.right - width);
         plotLastYear.attr("d", line(dataLastYear.map(function(d) { return [xLastYear(d.week), y(d.journeys)]; })));
         plotThisYear.attr("d", line(dataThisYear.map(function(d) { return [xThisYear(d.week), y(d.journeys)]; })));
+        labelLastYear.attr("x", xLastYear(dataLastYear.slice(-1)[0].week))
+          .attr("y", y(dataLastYear.slice(-1)[0].journeys) + 24);
+        labelThisYear.attr("x", xThisYear(dataThisYear.slice(-1)[0].week))
+          .attr("y", y(dataThisYear.slice(-1)[0].journeys) + 24);
       }
     </script>
   </body>

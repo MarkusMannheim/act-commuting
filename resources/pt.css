@@ -10,12 +10,6 @@
   font-weight: normal;
   src: local("ABCSans Regular"), url("./abcsans-regular.woff") format("woff");
 }
-@font-face {
-  font-family: "ABCSans Light";
-  font-style: normal;
-  font-weight: normal;
-  src: local("ABCSans Light"), url("./abcsans-light.woff") format("woff");
-}
 :root {
   font-family: "ABCSans Black", "Arial Black", sans-serif;
   font-size: 1em;
@@ -45,8 +39,7 @@ body {
 }
 #plotLastYear {
   stroke: rgba(28, 28, 28, .5);
-  stroke-dasharray: 3 6;
-  stroke-width: 3;
+  stroke-width: 2;
 }
 .tick text {
   font-size: .7rem;
@@ -58,20 +51,26 @@ path.domain, .tick line {
   opacity: .5;
 }
 .label {
-  position: absolute;
-  fill: white;
-  font-size: 1.5rem;
+  fill: rgba(28, 28, 28, .75);
+  font-size: .9rem;
+  text-anchor: end;
+  font-weight: bold;
+  font-family: "ABCSans Regular", "Arial", sans-serif;
+}
+#labelThisYear {
+  fill: #009CBF;
   text-anchor: middle;
 }
-#header {
+#header, #footer {
   color: #1C1C1C;
   position: absolute;
+
+}
+#header {
   font-size: 1.25rem;
 }
 #footer {
-  position: absolute;
   bottom: 0;
-  color: #1C1C1C;
   font-family: "ABCSans Regular", "Arial", sans-serif;
   font-size: .85rem;
 }
