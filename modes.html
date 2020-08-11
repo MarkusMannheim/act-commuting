@@ -51,7 +51,7 @@
         header = d3.select("#header");
         footer = d3.select("#footer");
         // set up
-        margin = { right: 16, left: 10 };
+        margin = { right: 0, left: 10 };
         sum = d3.sum(chartData, function(d) { return d.people; });
         max = d3.max(chartData, function(d) { return d.people / sum; });
         x = d3.scaleLinear()
@@ -90,8 +90,8 @@
         height = dimensions.height;
         let headerHeight = parseFloat(header.style("height"));
         let footerHeight = parseFloat(footer.style("height"));
-        margin.top = headerHeight + 8;
-        margin.bottom = footerHeight + 24;
+        margin.top = headerHeight + 16;
+        margin.bottom = footerHeight + 32;
         x.range([margin.left, width - margin.right]);
         y.range([margin.top, height - margin.bottom]);
         axis.ticks(width < 500 ? 3 : 5, ".0%")

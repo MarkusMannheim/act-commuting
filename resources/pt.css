@@ -38,7 +38,7 @@ body {
   stroke-width: 5;
 }
 #plotLastYear {
-  stroke: rgba(28, 28, 28, .5);
+  stroke: #F75F00;
   stroke-width: 2;
 }
 .tick text {
@@ -51,7 +51,7 @@ path.domain, .tick line {
   opacity: .5;
 }
 .label {
-  fill: rgba(28, 28, 28, .75);
+  fill: #F75F00;
   font-size: .9rem;
   text-anchor: end;
   font-weight: bold;
