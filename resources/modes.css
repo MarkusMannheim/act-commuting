@@ -10,12 +10,6 @@
   font-weight: normal;
   src: local("ABCSans Regular"), url("./abcsans-regular.woff") format("woff");
 }
-@font-face {
-  font-family: "ABCSans Light";
-  font-style: normal;
-  font-weight: normal;
-  src: local("ABCSans Light"), url("./abcsans-light.woff") format("woff");
-}
 :root {
   font-family: "ABCSans Regular", "Arial", sans-serif;
   font-size: 1em;
@@ -61,16 +55,18 @@ body {
 path.domain {
   stroke: none;
 }
-#header {
+#header, #footer {
   color: #1C1C1C;
   position: absolute;
   font-size: 1.25rem;
   font-family: "ABCSans Black", "Arial Black", sans-serif;
 }
+#header {
+  font-size: 1.25rem;
+}
 #footer {
-  position: absolute;
   bottom: 0;
-  color: #1C1C1C;
+  font-family: "ABCSans Regular", "Arial", sans-serif;
   font-size: .85rem;
 }
 a {
