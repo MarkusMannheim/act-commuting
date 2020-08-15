@@ -59,14 +59,13 @@ path.domain {
   color: #1C1C1C;
   position: absolute;
   font-size: 1.25rem;
-  font-family: "ABCSans Black", "Arial Black", sans-serif;
 }
 #header {
   font-size: 1.25rem;
+  font-weight: bold;
 }
 #footer {
   bottom: 0;
-  font-family: "ABCSans Regular", "Arial", sans-serif;
   font-size: .85rem;
 }
 a {
