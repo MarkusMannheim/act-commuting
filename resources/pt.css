@@ -1,17 +1,11 @@
 @font-face {
-  font-family: "ABCSans Black";
-  font-style: normal;
-  font-weight: normal;
-  src: local("ABCSans Black"), url("./abcsans-black.woff") format("woff");
-}
-@font-face {
   font-family: "ABCSans Regular";
   font-style: normal;
   font-weight: normal;
   src: local("ABCSans Regular"), url("./abcsans-regular.woff") format("woff");
 }
 :root {
-  font-family: "ABCSans Black", "Arial Black", sans-serif;
+  font-family: "ABCSans Regular", "Arial", sans-serif;
   font-size: 1em;
 }
 body {
@@ -55,7 +49,6 @@ path.domain, .tick line {
   font-size: .9rem;
   text-anchor: end;
   font-weight: bold;
-  font-family: "ABCSans Regular", "Arial", sans-serif;
 }
 #labelThisYear {
   fill: #009CBF;
@@ -64,14 +57,13 @@ path.domain, .tick line {
 #header, #footer {
   color: #1C1C1C;
   position: absolute;
-
 }
 #header {
   font-size: 1.25rem;
+  font-weight: bold;
 }
 #footer {
   bottom: 0;
-  font-family: "ABCSans Regular", "Arial", sans-serif;
   font-size: .85rem;
 }
 a {
